@@ -43,8 +43,8 @@ class InertiaPackages {
         }).filter((file, key) => {
             return file.extra && file.extra.inertia !== undefined;
         }).each(file => {
-            let view = path.resolve(__dirname, viewpath, 'vendor', file.extra.inertia.namespace);
-            this.packages[file.extra.inertia.namespace] = fs.existsSync(view) ? `${viewpath}/vendor/${file.extra.inertia.namespace}` : `vendor/${file.extra.inertia.vendor}/resources/views`;
+            let view = path.resolve(__dirname, this.viewpath, 'vendor', file.extra.inertia.namespace);
+            this.packages[file.extra.inertia.namespace] = fs.existsSync(view) ? `${this.viewpath}/vendor/${file.extra.inertia.namespace}` : `vendor/${file.extra.inertia.vendor}/resources/views`;
         })
     }
     webpackPlugins() {
