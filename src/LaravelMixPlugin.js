@@ -91,7 +91,7 @@ class InertiaPackages {
     }
 
     webpackConfig(webpackConfig) {
-        webpackConfig.watchOptions.ignored = /public/
+        webpackConfig.watchOptions.ignored = [/node_modules/, /public/]
 
         webpackConfig.resolve.symlinks = false
 
