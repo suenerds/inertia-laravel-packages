@@ -1,0 +1,23 @@
+{
+    "name": "inertia-laravel-packages",
+    "version": "0.0.1",
+    "description": "Load inertia views and dependencies from laravel packages like laravel does",
+    "exports": {
+        "./resolver": "./src/InertiaComponentResolver.js",
+        "./laravel-mix-plugin": "./src/LaravelMixPlugin.js"
+    },
+    "repository": "git@github.com:suenerds/inertia-laravel-packages.git",
+    "author": "Thore Suenert <mail@thoresuenert.de>",
+    "license": "MIT",
+    "peerDependencies": {
+        "laravel-mix": "^6.0.0"
+    },
+    "devDependencies": {
+        "collect.js": "^4.28.6",
+        "fs": "0.0.1-security",
+        "glob": "^7.1.6"
+    },
+    "volta": {
+        "node": "14.16.0"
+    }
+}
