@@ -55,7 +55,7 @@ class InertiaPackages {
     }
 
     webpackConfig(webpackConfig) {
-        this.plugins.each((item) => {
+        this.packages.each((item) => {
             webpackConfig.resolve.alias[`@${item.alias}`] = path.resolve(`vendor/${item.name}/resources/js`)
         })
     }
