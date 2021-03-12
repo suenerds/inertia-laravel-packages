@@ -54,11 +54,11 @@ class InertiaPackages {
         });
     }
 
-    webpackConfig(webpackConfig) {
-       collect(this.packages).each((item) => {
-            webpackConfig.resolve.alias[`@${item.alias}`] = path.resolve(`vendor/${item.name}/resources/js`)
-        })
-    }
+    // webpackConfig(webpackConfig) {
+    //    collect(this.packages).each((item) => {
+    //         webpackConfig.resolve.alias[`@${item.alias}`] = path.resolve(`vendor/${item.name}/resources/js`)
+    //     })
+    // }
 }
 
 mix.extend('inertiaPackages', new InertiaPackages());
