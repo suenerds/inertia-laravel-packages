@@ -25,10 +25,11 @@ class InertiaPackages {
         return ['collect.js', 'fs', 'glob'];
     }
 
-    register(viewpath) {
-        this.viewpath = viewpath;
-        this.packages = {};
-        this.alias = {};
+    register() {
+        this.viewpath = 'resources/views';
+        this.assetspath = 'resources/js';
+        this.hints = {};
+        this.alias = [];
     }
 
      /**
@@ -43,22 +44,63 @@ class InertiaPackages {
         }).filter((file, key) => {
             return file.extra && file.extra.inertia !== undefined;
         }).each(file => {
-            let view = path.resolve(__dirname, this.viewpath, 'vendor', file.extra.inertia.namespace);
-            this.packages[file.extra.inertia.namespace] = fs.existsSync(view) ? `${this.viewpath}/vendor/${file.extra.inertia.namespace}` : `vendor/${file.extra.inertia.vendor}/resources/views`;
+            let { namespace, vendor } = file.extra.inertia;
+
+            this.hints[namespace] = this.viewsArePublished(namespace) ?
+                this.getViewPublishedPath(namespace) :
+                this.getViewVendorPath(vendor)
+
+            this.alias.push({
+                namespace,
+                vendor
+            })
         })
     }
+
+    viewsArePublished(namespace) {
+        let view = path.resolve(this.viewpath, 'vendor', namespace);
+        return fs.existsSync(view);
+    }
+
+    getViewPublishedPath(namespace) {
+        return `${this.viewpath}/vendor/${namespace}`
+    }
+
+    getViewVendorPath(vendor) {
+        return `vendor/${vendor}/resources/views`;
+    }
+
+    jsAssetsArePublished(namespace) {
+        let view = path.resolve(this.assetspath, 'vendor', namespace);
+        return fs.existsSync(view);
+    }
+
+    getJsVendorPublishedPath(namespace) {
+        return path.resolve(`${this.assetspath}/vendor/${namespace}`);
+    }
+
+    getJsVendorPath(vendor) {
+        return path.resolve(`vendor/${vendor}/resources/js`);
+    }
+
     webpackPlugins() {
         return new webpack.DefinePlugin({
-            'process.env.hints' : JSON.stringify(this.packages),
+            'process.env.hints' : JSON.stringify(this.hints),
             'process.env.viewpath' : JSON.stringify(this.viewpath),
         });
     }
 
-    // webpackConfig(webpackConfig) {
-    //    collect(this.packages).each((item) => {
-    //         webpackConfig.resolve.alias[`@${item.alias}`] = path.resolve(`vendor/${item.name}/resources/js`)
-    //     })
-    // }
+    webpackConfig(webpackConfig) {
+        webpackConfig.watchOptions.ignored = /public/
+
+        webpackConfig.resolve.symlinks = false
+
+        collect(this.alias).each((alias) => {
+            webpackConfig.resolve.alias[`@${alias.namespace}`] = this.jsAssetsArePublished(alias.namespace) ?
+                this.getJsVendorPublishedPath(alias.namespace) :
+                this.getJsVendorPath(alias.vendor)
+        })
+    }
 }
 
 mix.extend('inertiaPackages', new InertiaPackages());

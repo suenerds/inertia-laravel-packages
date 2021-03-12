@@ -11,5 +11,5 @@ export default function(path) {
         path = `${viewPath}/${path}`
     }
 
-    return import(`../../${path}.inertia.vue`).then(module => module.default)
+    return `${path}.inertia.vue`
 }
