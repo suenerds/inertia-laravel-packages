@@ -1,8 +1,9 @@
-const mix = require('laravel-mix');
-let collect = require('collect.js');
-let fs = require("fs");
-let glob = require('glob');
-let webpack = require('webpack');
+const mix = require('laravel-mix')
+let collect = require('collect.js')
+let fs = require('fs')
+let path = require('path')
+let glob = require('glob')
+let webpack = require('webpack')
 /*
  |--------------------------------------------------------------------------
  | Mix Asset Management
